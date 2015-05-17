@@ -2,45 +2,43 @@ package hello;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.jms.config.AbstractJmsListenerEndpoint;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.jms.listener.MessageListenerContainer;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by maciej.debowski on 2015-04-30.
  */
-@Controller
+@RestController
 public class Index {
 
-    @Autowired
-    Receiver receiver;
+    private final String DESTINATION = "internet-chat";
+
+//    @Autowired
+//    Receiver receiver;
+
+//    @Autowired
+//    SyncReceiver syncReceiver;
 
     @Autowired
     ConfigurableApplicationContext context;
 
-    @RequestMapping("/")
-    public
-    @ResponseBody
-    String aaa() {
-        return "aaa" + receiver;
+    @RequestMapping("/receive/{me}")
+    public @ResponseBody String aaa(@PathVariable("me") String to) {
+        JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+        to = String.format("to='%s'", to);
+        return String.valueOf(jmsTemplate.receiveSelectedAndConvert(DESTINATION, to));
     }
 
-    @RequestMapping("/send/{to}/{message}")
-    public void send(@PathVariable("to") final String to, @PathVariable("message") final String message) {
-        MessageCreator messageCreator = new ChatMessageCreator("Artur", to, message);
+    @RequestMapping(value = "/send/{me}/{to}", method = RequestMethod.POST)
+    public ResponseEntity send(@PathVariable("me") String me, @PathVariable("to") String to, @RequestBody String message) {
+        MessageCreator messageCreator = new ChatMessageCreator(me, to, message);
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+        jmsTemplate.send(DESTINATION, messageCreator);
         System.out.println("Sending a new message.");
-        jmsTemplate.send("internet-chat", messageCreator);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 
 }

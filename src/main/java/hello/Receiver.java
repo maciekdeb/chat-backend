@@ -9,13 +9,13 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 
-@Component(value = "receiverJmsBean")
+//@Component(value = "receiverJmsBean")
 public class Receiver {
 
     @Autowired
     ConfigurableApplicationContext context;
 
-    @JmsListener(destination = "internet-chat", selector = "to='Maciek'")
+//    @JmsListener(destination = "internet-chat", selector = "to='Maciek'")
     public void receiveMessage(Message message) {
         System.out.println("Received : " + message);
         context.close();
