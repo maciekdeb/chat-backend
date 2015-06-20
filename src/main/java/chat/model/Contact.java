@@ -1,4 +1,6 @@
-package hello;
+package chat.model;
+
+import chat.model.ChatMessage;
 
 import javax.persistence.*;
 import java.util.ArrayList;

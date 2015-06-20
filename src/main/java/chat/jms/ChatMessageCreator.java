@@ -1,4 +1,4 @@
-package hello;
+package chat.jms;
 
 import org.springframework.jms.core.MessageCreator;
 

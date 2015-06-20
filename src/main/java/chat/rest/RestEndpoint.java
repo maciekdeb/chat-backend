@@ -1,6 +1,8 @@
-package hello;
+package chat.rest;
 
-import org.omg.CORBA.Environment;
+import chat.jms.ChatMessageCreator;
+import chat.model.Contact;
+import chat.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by maciej.debowski on 2015-04-30.
  */
 @RestController
-public class Index {
+public class RestEndpoint {
 
     private final String DESTINATION = "internet-chat";
 
