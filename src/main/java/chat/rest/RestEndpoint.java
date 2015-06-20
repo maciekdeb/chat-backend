@@ -1,8 +1,10 @@
 package chat.rest;
 
 import chat.jms.ChatMessageCreator;
+import chat.model.ChatMessage;
 import chat.model.Contact;
 import chat.repository.ContactRepository;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.web.bind.annotation.*;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by maciej.debowski on 2015-04-30.
@@ -34,16 +44,30 @@ public class RestEndpoint {
     @RequestMapping("/saveContact/{login}")
     public ResponseEntity saveContact(@PathVariable("login") String login) {
         contactRepository.save(new Contact(login));
-        System.out.println(contactRepository.findByLogin(login));
-
         return new ResponseEntity<String>(HttpStatus.CREATED);
     }
 
+    @RequestMapping("/getContacts")
+    public Iterable<Contact> getContacts() {
+        return contactRepository.findAll();
+    }
+
     @RequestMapping("/receive/{me}")
-    public @ResponseBody String receive(@PathVariable("me") String to) {
+    public ChatMessage receive(@PathVariable("me") String to) {
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-        to = String.format("to='%s'", to);
-        return String.valueOf(jmsTemplate.receiveSelectedAndConvert(DESTINATION, to));
+        Message message = jmsTemplate.receiveSelected(DESTINATION, String.format("to='%s'", to));
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setIsIncoming(true);
+        chatMessage.setIsRead(false);
+        try {
+            chatMessage.setDate(new Date(message.getJMSTimestamp()));
+            chatMessage.setContact(new Contact(message.getStringProperty("from")));
+            chatMessage.setContent(((ActiveMQTextMessage) message).getText());
+        } catch (JMSException e) {
+            return null;
+        }
+        return chatMessage;
     }
 
     @RequestMapping(value = "/send/{me}/{to}", method = RequestMethod.POST)

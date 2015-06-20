@@ -28,9 +28,27 @@ public class Contact {
         this.login = login;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Contact[id=%d, login='%s']", id, login);
+    public long getId() {
+        return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public List<ChatMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<ChatMessage> messages) {
+        this.messages = messages;
+    }
 }
