@@ -18,9 +18,11 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.jms.listener.AbstractMessageListenerContainer;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.MessageListenerContainer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.FileSystemUtils;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableJms
 public class Application {
 
@@ -30,27 +32,6 @@ public class Application {
     public ConnectionFactory connectionFactory() {
         return new ActiveMQConnectionFactory(JMS_BROKER_URL);
     }
-
-//    @Bean // Strictly speaking this bean is not necessary as boot creates a default
-//    JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
-//        SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
-//        factory.createListenerContainer(new AbstractJmsListenerEndpoint() {
-//            @Override
-//            protected MessageListener createMessageListener(MessageListenerContainer container) {
-//                MessageListener messageListener = new MessageListener() {
-//                    @Override
-//                    public void onMessage(Message message) {
-//                        System.out.println(message);
-//                    }
-//                };
-//                this.setSelector("to='maciek'");
-//                this.setDestination("internet-chat");
-//                return messageListener;
-//            }
-//        });
-//        factory.setConnectionFactory(connectionFactory);
-//        return factory;
-//    }
 
     public static void main(String[] args) {
         FileSystemUtils.deleteRecursively(new File("activemq-data"));

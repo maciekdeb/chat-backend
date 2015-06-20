@@ -1,5 +1,6 @@
 package hello;
 
+import org.omg.CORBA.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,21 @@ public class Index {
 //    SyncReceiver syncReceiver;
 
     @Autowired
+    ContactRepository contactRepository;
+
+    @Autowired
     ConfigurableApplicationContext context;
 
+    @RequestMapping("/saveContact/{login}")
+    public ResponseEntity saveContact(@PathVariable("login") String login) {
+        contactRepository.save(new Contact(login));
+        System.out.println(contactRepository.findByLogin(login));
+
+        return new ResponseEntity<String>(HttpStatus.CREATED);
+    }
+
     @RequestMapping("/receive/{me}")
-    public @ResponseBody String aaa(@PathVariable("me") String to) {
+    public @ResponseBody String receive(@PathVariable("me") String to) {
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
         to = String.format("to='%s'", to);
         return String.valueOf(jmsTemplate.receiveSelectedAndConvert(DESTINATION, to));
