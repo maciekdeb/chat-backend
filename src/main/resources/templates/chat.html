@@ -233,7 +233,7 @@
         $.ajax({
             type: "POST",
             url: submitMessageUrl,
-            data: messageContent,
+            data: {message: messageContent},
             success: function(data) {
                 $('.chat-area').text("");
                 refreshMessages();
@@ -241,11 +241,6 @@
             error: function() {
                 console.log("error");
             },
-        });
-
-        $.post(submitMessageUrl, {
-            data: messageContent,
-
         });
 
     }
@@ -263,7 +258,7 @@
                     $(".chat-window").html("");;
                     for(var message in data){
                         var div = document.createElement("div");
-                        if(message.isIncoming){
+                        if(data[message].isIncoming){
                             div.className += "card col s8 msg-contact";
                         }else{
                             div.className += "card col s8 offset-s4 msg-own";
@@ -271,14 +266,14 @@
                         var p = document.createElement("p");
                         var titleSpan = document.createElement("span");
                         titleSpan.className += "msg-about";
-                        if(message.isIncoming){
-                            titleSpan.innerText = message.contact.login + " - " + message.date;
+                        if(data[message].isIncoming){
+                            titleSpan.innerText = data[message].contact.login + " - " + data[message].date;
                         }else{
-                            titleSpan.innerText = "Me - " + message.date;
+                            titleSpan.innerText = "Me - " + data[message].date;
                         }
                         var contentSpan = document.createElement("span");
                         contentSpan.className = "msg-content";
-                        contentSpan.innerText = message.content;
+                        contentSpan.innerText = data[message].content;
 
                         p.appendChild(titleSpan);
                         p.appendChild(contentSpan);

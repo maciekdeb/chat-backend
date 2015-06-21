@@ -101,7 +101,7 @@ public class RestEndpoint {
     }
 
     @RequestMapping(value = "/send/{to}", method = RequestMethod.POST)
-    public ResponseEntity send(@CookieValue("LOGIN") String login, @PathVariable("to") String to, @RequestBody String message) {
+    public ResponseEntity send(@CookieValue("LOGIN") String login, @PathVariable("to") String to, @RequestParam String message) {
         MessageCreator messageCreator = new ChatMessageCreator(login, to, message);
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
         jmsTemplate.send(DESTINATION, messageCreator);
