@@ -230,7 +230,9 @@
         var messageContent = $('.chat-area').text();
         var submitMessageUrl = "/chat/send/" + contact;
 
-        $.post(submitMessageUrl, {
+        $.ajax({
+            type: "POST",
+            url: submitMessageUrl,
             data: messageContent,
             success: function(data) {
                 $('.chat-area').text("");
@@ -238,7 +240,12 @@
             },
             error: function() {
                 console.log("error");
-            }
+            },
+        });
+
+        $.post(submitMessageUrl, {
+            data: messageContent,
+
         });
 
     }
