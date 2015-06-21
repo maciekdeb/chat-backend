@@ -102,6 +102,14 @@ public class RestEndpoint {
         MessageCreator messageCreator = new ChatMessageCreator(login, to, message);
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
         jmsTemplate.send(DESTINATION, messageCreator);
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setContact(contactRepository.findByLogin(to));
+        chatMessage.setContent(message);
+        chatMessage.setDate(new Date());
+        chatMessage.setIsIncoming(false);
+        chatMessage.setIsRead(true);
+
         System.out.println("Sending a new message.");
         return new ResponseEntity<String>(HttpStatus.OK);
     }
