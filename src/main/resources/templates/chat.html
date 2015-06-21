@@ -33,42 +33,17 @@
             </div>
 
 
-            <div class="collection contact-list-name ">
+            <div id="contact-list-div" class="collection contact-list-name ">
 
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">Anna Brown <span
-                        class="new badge">4</span></span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light active">
-                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">Adam Smith<span
-                        class="new badge">2</span></span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">George Clooney<span
-                        class="new badge">10</span></span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">John Kowalsky</span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">Patricia Keys</span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-offline left"></i> <span
-                        class="title center">Maria Nicole Blue</span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-online left"></i> <span
-                        class="title center">Angelina White-Red</span>
-                </a>
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
-                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">Eva Yellow</span>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light" th:each="contact : ${contactListMap}">
+                    <i class="mdi-image-lens contact-online left"></i> <span class="title center" th:text="${contact.key.login}">Login<span
+                        class="new badge" th:text="${contact.value}" th:if="${contact.value > 0}">0</span></span>
                 </a>
 
             </div>
 
-            <div class="contact-list-add">
-                <input type="text" class="contact-list-add-input col s10" >
+            <div class="contact-list-add" >
+                <input type="text" class="contact-list-add-input col s10" />
                 <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2"><i class="mdi-social-person-add"></i></button>
             </div>
 
@@ -169,11 +144,57 @@
     </div>
 
 </div>
-</div>
+
+
+
 
 
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="../../js/materialize.min.js" th:src="@{/js/materialize.min.js}"></script>
+
+<script>
+
+    (function(){
+
+        $(".contact-list-add-submit").click(function(){
+            if($(".contact-list-add-input").val()){
+                var saveContactUrl = "/chat/saveContact/" + $(".contact-list-add-input").val();
+                $.ajax(saveContactUrl, {
+                    success: function(data) {
+                        buildContacts();
+                    },
+                    error: function() {
+                        console.log("error");
+                    }
+                })
+            }
+        });
+
+        function buildContacts(){
+            var getContactsUrl = "/chat/getContacts";
+
+            $.ajax(getContactsUrl, {
+                success: function(data) {
+                    for(var index in contacts){
+                        var contactListDiv = $('#contactListDiv');
+
+
+
+                        console.log(contacts[index].login);
+                    }
+                },
+                error: function() {
+                    console.log("error");
+                }
+            });
+        };
+        
+
+    })();
+
+</script>
+
+
 </body>
 </html>
