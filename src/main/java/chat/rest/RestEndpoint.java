@@ -97,9 +97,9 @@ public class RestEndpoint {
         return chatMessage;
     }
 
-    @RequestMapping(value = "/send/{me}/{to}", method = RequestMethod.POST)
-    public ResponseEntity send(@PathVariable("me") String me, @PathVariable("to") String to, @RequestBody String message) {
-        MessageCreator messageCreator = new ChatMessageCreator(me, to, message);
+    @RequestMapping(value = "/send/{to}", method = RequestMethod.POST)
+    public ResponseEntity send(@CookieValue("LOGIN") String login, @PathVariable("to") String to, @RequestBody String message) {
+        MessageCreator messageCreator = new ChatMessageCreator(login, to, message);
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
         jmsTemplate.send(DESTINATION, messageCreator);
         System.out.println("Sending a new message.");

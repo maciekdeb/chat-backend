@@ -46,7 +46,7 @@ public class ScheduledReceiver {
         if (login != null && !login.isEmpty()) {
             System.out.println("Scheduled task fired... for " + login);
             JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-            jmsTemplate.setReceiveTimeout(5000);
+//            jmsTemplate.setReceiveTimeout(5000);
             Message message = jmsTemplate.receiveSelected(DESTINATION, String.format("to='%s'", login));
 
             ChatMessage chatMessage = new ChatMessage();
@@ -54,10 +54,10 @@ public class ScheduledReceiver {
             chatMessage.setIsRead(false);
             try {
                 chatMessage.setDate(new Date(message.getJMSTimestamp()));
-//                Contact contact = contactRepository.findByLogin(message.getStringProperty("from"));
-//                if (contact != null) {
-//                    chatMessage.setContact(contact.get(0));
-//                }
+                Contact contact = contactRepository.findByLogin(message.getStringProperty("from"));
+                if (contact != null) {
+                    chatMessage.setContact(contact);
+                }
                 chatMessage.setContent(((ActiveMQTextMessage) message).getText());
                 chatMessageRepository.save(chatMessage);
             } catch (JMSException e) {
