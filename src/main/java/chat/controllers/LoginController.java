@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
@@ -27,9 +29,20 @@ public class LoginController {
     @Autowired
     ConfigurableApplicationContext context;
 
-    @RequestMapping(value = "/login")
-    public String login() {
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String renderLogin() {
         return "login";
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String submitLogin() {
+
+        return "redirect:/chat";
+    }
+
+    @RequestMapping(value = "/addPerson", method = RequestMethod.POST)
+    public String addPerson(HttpServletResponse response, @RequestParam String login){
+        response.addCookie(new Cookie("LOGIN", login));
+        return "redirect:/";
+    }
 }

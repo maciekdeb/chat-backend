@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="css/main.css" media="screen,projection"/>
@@ -9,17 +9,19 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col s8 offset-s2">
+            <div class="col s6">
                 <span class="logo">theCommunicator</span>
             </div>
         </div>
         <div class="row">
             <div class="contact-list card col s6 offset-s3">
                 <div class="contact-list-add login">
-                    <input type="text" class="contact-list-add-input col s10"/>
-                    <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2">
-                        <i class="mdi-av-play-arrow"></i>
-                    </button>
+                    <form action="#" th:action="@{/login}" name="loginForm" method="post">
+                        <input type="text" name="login" class="contact-list-add-input col s10"/>
+                        <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2" onclick="loginSubmit()">
+                            <i class="mdi-av-play-arrow"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -28,5 +30,13 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+
+        function loginSubmit() {
+            document.loginForm.submit();
+        }
+
+    </script>
+
 </body>
 </html>
