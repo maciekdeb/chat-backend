@@ -28,12 +28,6 @@ public class RestEndpoint {
 
     private final String DESTINATION = "internet-chat";
 
-//    @Autowired
-//    Receiver receiver;
-
-//    @Autowired
-//    SyncReceiver syncReceiver;
-
     @Resource
     ContactRepository contactRepository;
 

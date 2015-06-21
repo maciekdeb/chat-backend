@@ -35,7 +35,7 @@
 
             <div id="contact-list-div" class="collection contact-list-name ">
 
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light" th:each="contact : ${contactListMap}">
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light contact-item" th:each="contact : ${contactListMap}">
                     <i class="mdi-image-lens contact-online left"></i> <span class="title center" th:text="${contact.key}">Login<span
                         class="new badge" th:text="${contact.value}" th:if="${contact.value > 0}">0</span></span>
                 </a>
@@ -54,7 +54,7 @@
 
             <div class="card-content white-text valign-wrapper">
                 <i class="small mdi-social-person"></i>
-                    <span class="contact-list-header card-title">
+                    <span id="active-person" class="contact-list-header card-title">
                        Adam Smith
                     </span>
             </div>
@@ -207,6 +207,13 @@
                 contactListDiv.appendChild(a);
             });
         }
+
+        $(".contact-item").click(function(){
+            var activePerson = $('#active-person');
+            activePerson.text($(this).find('span').text());
+
+            $(this).addClass('active');
+        });
 
 
     })();

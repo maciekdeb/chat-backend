@@ -1,6 +1,7 @@
 package chat.controllers;
 
 import chat.jms.ChatMessageCreator;
+import chat.jms.ScheduledReceiver;
 import chat.model.ChatMessage;
 import chat.model.Contact;
 import chat.repository.ContactRepository;
@@ -14,6 +15,7 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.servlet.http.Cookie;
@@ -27,7 +29,10 @@ import java.util.Date;
 public class LoginController {
 
     @Autowired
-    ConfigurableApplicationContext context;
+    private ConfigurableApplicationContext context;
+
+    @Resource
+    private ScheduledReceiver scheduledReceiver;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String renderLogin() {
@@ -36,7 +41,15 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String submitLogin(HttpServletResponse response, @RequestParam String login) {
+        //store in cookie
         response.addCookie(new Cookie("LOGIN", login));
+
+        //save login name for jms listener
+        if (scheduledReceiver != null) {
+            System.out.println("I am setting login inside the scheduled task...");
+            scheduledReceiver.setLogin(login);
+        }
+
         return "redirect:/chat";
     }
 
