@@ -57,6 +57,7 @@ public class RestEndpoint {
                 return new ResponseEntity<String>(HttpStatus.CONFLICT);
             }else{
                 contactRepository.save(new Contact(login));
+                System.out.println("Zapisano kontakt " + contactRepository.findByLogin(login) + ", aktualnie masz " + contactRepository.findAll().size());
                 return new ResponseEntity<String>(HttpStatus.CREATED);
             }
         }
@@ -75,7 +76,9 @@ public class RestEndpoint {
         Contact contact = getContactRepository().findByLogin(from);
         if(contact != null){
             messages = getChatMessageRepository().findByContact(contact);
+            System.out.println("Znaleziono kontakt");
         }
+        System.out.println("getMessages " + messages);
         return messages;
     }
 
@@ -109,6 +112,8 @@ public class RestEndpoint {
         chatMessage.setDate(new Date());
         chatMessage.setIsIncoming(false);
         chatMessage.setIsRead(true);
+
+        chatMessageRepository.save(chatMessage);
 
         System.out.println("Sending a new message.");
         return new ResponseEntity<String>(HttpStatus.OK);

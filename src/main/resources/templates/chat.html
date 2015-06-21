@@ -59,7 +59,7 @@
                     </span>
             </div>
 
-            <div class="chat-window ">
+            <div id="chat-window" class="chat-window ">
 
                 <div class="card col s8 msg-contact">
                     <p>
@@ -283,7 +283,7 @@
                         p.appendChild(titleSpan);
                         p.appendChild(contentSpan);
                         div.appendChild(p);
-                        chatWindow.appendChild(div);
+                        document.getElementById("chat-window").appendChild(div);
                     }
 
 
