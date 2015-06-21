@@ -52,8 +52,8 @@ public class RestEndpoint {
     @RequestMapping("/saveContact/{login}")
     public ResponseEntity saveContact(@PathVariable("login") String login) {
         if (contactRepository != null) {
-            List<Contact> contacts = contactRepository.findByLogin(login);
-            if (contacts != null && !contacts.isEmpty()){
+            Contact contact = contactRepository.findByLogin(login);
+            if (contact != null){
                 return new ResponseEntity<String>(HttpStatus.CONFLICT);
             }else{
                 contactRepository.save(new Contact(login));
@@ -67,6 +67,16 @@ public class RestEndpoint {
     public Map<String, Integer> getContacts() {
 
         return getContactListMap();
+    }
+
+    @RequestMapping(value = "/getMessages/{from}")
+    public List<ChatMessage> getMessages(@PathVariable("from") String from){
+        List<ChatMessage> messages = new ArrayList<ChatMessage>();
+        Contact contact = getContactRepository().findByLogin(from);
+        if(contact != null){
+            messages = getChatMessageRepository().findByContact(contact);
+        }
+        return messages;
     }
 
     @RequestMapping("/receive/{me}")

@@ -206,6 +206,52 @@
                 a.appendChild(loginSpan);
                 contactListDiv.appendChild(a);
             });
+        };
+
+        function refreshMessages(){
+            var contact = $('.contact-list-header').text();
+
+            var getMessagesUrl = "/chat/getMessages/" + contact;
+
+            $.ajax(getMessagesUrl, {
+                success: function(data) {
+
+                    if(data){
+                        var chatWindow = $('.chat-window');
+                        chatWindow.innerHTML("");
+                        for(var message in data){
+                            var div = document.createElement("div");
+                            if(message.isIncoming){
+                                div.className += "card col s8 msg-contact";
+                            }else{
+                                div.className += "card col s8 offset-s4 msg-own";
+                            }
+                            var p = document.createElement("p");
+                            var titleSpan = document.createElement("span");
+                            titleSpan.className += "msg-about";
+                            if(message.isIncoming){
+                                titleSpan.innerText = message.contact.login + " - " + message.date;
+                            }else{
+                                titleSpan.innerText = "Me - " + message.date;
+                            }
+                            var contentSpan = document.createElement("span");
+                            contentSpan.className = "msg-content";
+                            contentSpan.innerText = message.content;
+
+                            p.appendChild(titleSpan);
+                            p.appendChild(contentSpan);
+                            div.appendChild(p);
+                            chatWindow.appendChild(div);
+                        }
+
+                    }
+
+                },
+                error: function() {
+                    console.log("error");
+                }
+            });
+
         }
 
         $(".contact-item").click(function(){
@@ -219,6 +265,28 @@
     })();
 
 </script>
+
+<div class="card col s8 msg-contact" >
+    <p>
+        <span class="msg-about">Adam Smith - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus. Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+    </p>
+</div>
+
+<div class="card col s8 offset-s4 msg-own" >
+    <p>
+        <span class="msg-about">You - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+    </p>
+</div>
 
 </body>
 </html>

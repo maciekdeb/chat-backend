@@ -11,6 +11,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
 
-    List<Contact> findByLogin(String login);
+    Contact findByLogin(String login);
 
 }
