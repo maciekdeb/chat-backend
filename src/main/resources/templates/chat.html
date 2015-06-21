@@ -227,7 +227,7 @@
 
     function sendMessage(){
         var contact = $('.current-contact').text();
-        var messageContent = $('.chat-area').text();
+        var messageContent = $('.chat-area').val();
         var submitMessageUrl = "/chat/send/" + contact;
 
         $.ajax({
