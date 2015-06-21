@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="../../css/materialize.min.css" th:href="@{/css/materialize.min.css}" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="../../css/main.css" th:href="@{/css/main.css}" media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col s12">
+            <span class="logo">theCommunicator</span>
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="contact-list card col s4">
+            <div class="card-content white-text valign-wrapper">
+                <i class="small mdi-social-group"></i>
+                    <span class="contact-list-header card-title">
+                       Contacts
+                    </span>
+
+
+            </div>
+
+
+            <div class="collection contact-list-name ">
+
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">Anna Brown <span
+                        class="new badge">4</span></span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light active">
+                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">Adam Smith<span
+                        class="new badge">2</span></span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-online left"></i> <span class="title center">George Clooney<span
+                        class="new badge">10</span></span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">John Kowalsky</span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">Patricia Keys</span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-offline left"></i> <span
+                        class="title center">Maria Nicole Blue</span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-online left"></i> <span
+                        class="title center">Angelina White-Red</span>
+                </a>
+                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light">
+                    <i class="mdi-image-lens contact-away left"></i> <span class="title center">Eva Yellow</span>
+                </a>
+
+            </div>
+
+            <div class="contact-list-add">
+                <input type="text" class="contact-list-add-input col s10" >
+                <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2"><i class="mdi-social-person-add"></i></button>
+            </div>
+
+        </div>
+
+
+        <div class="communicator-right card col s7 offset-s1 z-depth-2">
+
+            <div class="card-content white-text valign-wrapper">
+                <i class="small mdi-social-person"></i>
+                    <span class="contact-list-header card-title">
+                       Adam Smith
+                    </span>
+            </div>
+
+            <div class="chat-window ">
+
+                <div class="card col s8 msg-contact">
+                    <p>
+                        <span class="msg-about">Adam Smith - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 offset-s4 msg-own" >
+                    <p>
+                        <span class="msg-about">You - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 msg-contact">
+                    <p>
+                        <span class="msg-about">Adam Smith - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 msg-contact" >
+                    <p>
+                        <span class="msg-about">Adam Smith - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus. Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 offset-s4 msg-own" >
+                    <p>
+                        <span class="msg-about">You - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 offset-s4 msg-own" >
+                    <p>
+                        <span class="msg-about">You - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+                <div class="card col s8 offset-s4 msg-own" >
+                    <p>
+                        <span class="msg-about">You - 2015-03-01 12:34:36</span>
+                      <span class="msg-content">Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipiscing elit. Donec maximus sagittis rhoncus.
+                      </span>
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div>
+                <textarea class="chat-area col s12" ></textarea>
+                <a class="chat-area-submit waves-effect waves-light btn right yellow darken-4"><i class="mdi-hardware-keyboard-return"></i></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/materialize.min.js" th:src="@{/js/materialize.min.js}"></script>
+</body>
+</html>
