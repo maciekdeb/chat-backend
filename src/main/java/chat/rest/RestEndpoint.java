@@ -43,8 +43,15 @@ public class RestEndpoint {
 
     @RequestMapping("/saveContact/{login}")
     public ResponseEntity saveContact(@PathVariable("login") String login) {
-        contactRepository.save(new Contact(login));
-        return new ResponseEntity<String>(HttpStatus.CREATED);
+        if (contactRepository != null) {
+            if (contactRepository.findByLogin(login) != null) {
+                return new ResponseEntity<String>(HttpStatus.CREATED);
+            } else {
+                contactRepository.save(new Contact(login));
+                return new ResponseEntity<String>(HttpStatus.CONFLICT);
+            }
+        }
+        return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @RequestMapping("/getContacts")
