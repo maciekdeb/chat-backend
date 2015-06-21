@@ -1,5 +1,8 @@
 package chat.controllers;
 
+import chat.model.ChatMessage;
+import chat.model.Contact;
+import chat.repository.ChatMessageRepository;
 import chat.repository.ContactRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rozar_000 on 2015-06-21.
@@ -17,17 +23,40 @@ public class ChatController {
     @Resource
     private ContactRepository contactRepository;
 
+    @Resource
+    private ChatMessageRepository chatMessageRepository;
+
     protected ContactRepository getContactRepository(){
         return this.contactRepository;
+    }
+
+    protected ChatMessageRepository getChatMessageRepository(){
+        return this.chatMessageRepository;
     }
 
     @RequestMapping(value = "/chat", method = RequestMethod.GET)
     public String getChat(final Model model){
         model.addAttribute("contacts", getContactRepository().findAll());
-        
+        model.addAttribute("contactListMap", getContactListMap());
+
         return "chat";
     }
 
+    private Map<Contact, Integer> getContactListMap(){
+        Map<Contact, Integer> contactListMap = new HashMap<Contact, Integer>();
+
+        List<Contact> contacts = getContactRepository().findAll();
+        for(Contact contact : contacts){
+
+            if(contact != null){
+                List<ChatMessage> chatMessages = getChatMessageRepository().findByIsIncomingTrueAndIsReadFalseAndContact(contact);
+                if(chatMessages != null) {
+                    contactListMap.put(contact, chatMessages.size());
+                }
+            }
+        }
+        return contactListMap;
+    }
 
 
 }
