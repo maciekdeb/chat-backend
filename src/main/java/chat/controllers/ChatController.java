@@ -42,8 +42,8 @@ public class ChatController {
         return "chat";
     }
 
-    private Map<Contact, Integer> getContactListMap(){
-        Map<Contact, Integer> contactListMap = new HashMap<Contact, Integer>();
+    private Map<String, Integer> getContactListMap(){
+        Map<String, Integer> contactListMap = new HashMap<String, Integer>();
 
         List<Contact> contacts = getContactRepository().findAll();
         for(Contact contact : contacts){
@@ -51,7 +51,7 @@ public class ChatController {
             if(contact != null){
                 List<ChatMessage> chatMessages = getChatMessageRepository().findByIsIncomingTrueAndIsReadFalseAndContact(contact);
                 if(chatMessages != null) {
-                    contactListMap.put(contact, chatMessages.size());
+                    contactListMap.put(contact.getLogin(), chatMessages.size());
                 }
             }
         }

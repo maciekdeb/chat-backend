@@ -36,7 +36,7 @@
             <div id="contact-list-div" class="collection contact-list-name ">
 
                 <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light" th:each="contact : ${contactListMap}">
-                    <i class="mdi-image-lens contact-online left"></i> <span class="title center" th:text="${contact.key.login}">Login<span
+                    <i class="mdi-image-lens contact-online left"></i> <span class="title center" th:text="${contact.key}">Login<span
                         class="new badge" th:text="${contact.value}" th:if="${contact.value > 0}">0</span></span>
                 </a>
 
@@ -176,13 +176,7 @@
 
             $.ajax(getContactsUrl, {
                 success: function(data) {
-                    for(var index in contacts){
-                        var contactListDiv = $('#contactListDiv');
-
-
-
-                        console.log(contacts[index].login);
-                    }
+                    createContact(data);
                 },
                 error: function() {
                     console.log("error");
@@ -190,11 +184,34 @@
             });
         };
 
+        function createContact(contactListMap){
+            var contactListDiv = document.getElementById("contact-list-div");
+            contactListDiv.innerHTML = "";
+            $.each( contactListMap, function(contact,unreadMessages) {
+                var a = document.createElement("a");
+                a.href = "#!";
+                a.className += "collection-item contact-list-name valign-wrapper waves-effect waves-light";
+                var i = document.createElement("i");
+                i.className += "mdi-image-lens contact-online left";
+                a.appendChild(i);
+                var loginSpan = document.createElement("span");
+                loginSpan.className += "title center";
+                loginSpan.innerText = contact;
+                if (unreadMessages > 0) {
+                    var msgSpan = document.createElement("span");
+                    msgSpan.className += "new badge";
+                    msgSpan.text = unreadMessages;
+                    loginSpan.appendChild(msgSpan);
+                }
+                a.appendChild(loginSpan);
+                contactListDiv.appendChild(a);
+            });
+        }
+
 
     })();
 
 </script>
-
 
 </body>
 </html>

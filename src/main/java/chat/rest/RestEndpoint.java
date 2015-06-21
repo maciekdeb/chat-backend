@@ -3,6 +3,7 @@ package chat.rest;
 import chat.jms.ChatMessageCreator;
 import chat.model.ChatMessage;
 import chat.model.Contact;
+import chat.repository.ChatMessageRepository;
 import chat.repository.ContactRepository;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,11 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by maciej.debowski on 2015-04-30.
@@ -35,11 +34,26 @@ public class RestEndpoint {
 //    @Autowired
 //    SyncReceiver syncReceiver;
 
-    @Autowired
+    @Resource
     ContactRepository contactRepository;
 
     @Autowired
     ConfigurableApplicationContext context;
+
+    @Resource
+    ChatMessageRepository chatMessageRepository;
+
+    public ConfigurableApplicationContext getContext() {
+        return context;
+    }
+
+    public ContactRepository getContactRepository() {
+        return contactRepository;
+    }
+
+    public ChatMessageRepository getChatMessageRepository() {
+        return chatMessageRepository;
+    }
 
     @RequestMapping("/saveContact/{login}")
     public ResponseEntity saveContact(@PathVariable("login") String login) {
@@ -56,8 +70,9 @@ public class RestEndpoint {
     }
 
     @RequestMapping("/getContacts")
-    public Iterable<Contact> getContacts() {
-        return contactRepository.findAll();
+    public Map<String, Integer> getContacts() {
+
+        return getContactListMap();
     }
 
     @RequestMapping("/receive/{me}")
@@ -85,6 +100,22 @@ public class RestEndpoint {
         jmsTemplate.send(DESTINATION, messageCreator);
         System.out.println("Sending a new message.");
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    private Map<String, Integer> getContactListMap(){
+        Map<String, Integer> contactListMap = new HashMap<String, Integer>();
+
+        List<Contact> contacts = getContactRepository().findAll();
+        for(Contact contact : contacts){
+
+            if(contact != null){
+                List<ChatMessage> chatMessages = getChatMessageRepository().findByIsIncomingTrueAndIsReadFalseAndContact(contact);
+                if(chatMessages != null) {
+                    contactListMap.put(contact.getLogin(), chatMessages.size());
+                }
+            }
+        }
+        return contactListMap;
     }
 
 }

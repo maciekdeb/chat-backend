@@ -51,4 +51,5 @@ public class Contact {
     public void setMessages(List<ChatMessage> messages) {
         this.messages = messages;
     }
+
 }
