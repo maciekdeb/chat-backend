@@ -35,7 +35,7 @@
 
             <div id="contact-list-div" class="collection contact-list-name ">
 
-                <a href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light contact-item" th:each="contact : ${contactListMap}">
+                <a onclick="changeActiveContact(this);" href="#!" class="collection-item contact-list-name valign-wrapper waves-effect waves-light contact-item" th:each="contact : ${contactListMap}">
                     <i class="mdi-image-lens contact-online left"></i> <span class="title center" th:text="${contact.key}">Login<span
                         class="new badge" th:text="${contact.value}" th:if="${contact.value > 0}">0</span></span>
                 </a>
@@ -44,7 +44,7 @@
 
             <div class="contact-list-add" >
                 <input type="text" class="contact-list-add-input col s10" />
-                <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2"><i class="mdi-social-person-add"></i></button>
+                <button class="contact-list-add-submit waves-effect waves-light btn yellow darken-4 col s2" ><i class="mdi-social-person-add"></i></button>
             </div>
 
         </div>
@@ -54,7 +54,7 @@
 
             <div class="card-content white-text valign-wrapper">
                 <i class="small mdi-social-person"></i>
-                    <span id="active-person" class="contact-list-header card-title">
+                    <span id="active-person" class="current-contact contact-list-header card-title">
                        Adam Smith
                     </span>
             </div>
@@ -189,8 +189,9 @@
             contactListDiv.innerHTML = "";
             $.each( contactListMap, function(contact,unreadMessages) {
                 var a = document.createElement("a");
+
                 a.href = "#!";
-                a.className += "collection-item contact-list-name valign-wrapper waves-effect waves-light";
+                a.className += "collection-item contact-list-name valign-wrapper waves-effect waves-light contact-item";
                 var i = document.createElement("i");
                 i.className += "mdi-image-lens contact-online left";
                 a.appendChild(i);
@@ -203,90 +204,93 @@
                     msgSpan.text = unreadMessages;
                     loginSpan.appendChild(msgSpan);
                 }
+                a.onclick = function(){ changeActiveContact(this);};
                 a.appendChild(loginSpan);
                 contactListDiv.appendChild(a);
             });
         };
 
-        function refreshMessages(){
-            var contact = $('.contact-list-header').text();
 
-            var getMessagesUrl = "/chat/getMessages/" + contact;
 
-            $.ajax(getMessagesUrl, {
-                success: function(data) {
-
-                    if(data){
-                        var chatWindow = $('.chat-window');
-                        chatWindow.innerHTML("");
-                        for(var message in data){
-                            var div = document.createElement("div");
-                            if(message.isIncoming){
-                                div.className += "card col s8 msg-contact";
-                            }else{
-                                div.className += "card col s8 offset-s4 msg-own";
-                            }
-                            var p = document.createElement("p");
-                            var titleSpan = document.createElement("span");
-                            titleSpan.className += "msg-about";
-                            if(message.isIncoming){
-                                titleSpan.innerText = message.contact.login + " - " + message.date;
-                            }else{
-                                titleSpan.innerText = "Me - " + message.date;
-                            }
-                            var contentSpan = document.createElement("span");
-                            contentSpan.className = "msg-content";
-                            contentSpan.innerText = message.content;
-
-                            p.appendChild(titleSpan);
-                            p.appendChild(contentSpan);
-                            div.appendChild(p);
-                            chatWindow.appendChild(div);
-                        }
-
-                    }
-
-                },
-                error: function() {
-                    console.log("error");
-                }
-            });
-
-        }
-
-        $(".contact-item").click(function(){
-            var activePerson = $('#active-person');
-            activePerson.text($(this).find('span').text());
-
-            $(this).addClass('active');
-        });
 
 
     })();
 
+
+    function changeActiveContact(element){
+        var activePerson = $('#active-person');
+        activePerson.text($(element).find('span').text());
+        $(element).addClass('active');
+
+        refreshMessages();
+    };
+
+    function sendMessage(){
+        var contact = $('.current-contact').text();
+        var messageContent = $('.chat-area').text();
+        var submitMessageUrl = "/chat/send/" + contact;
+
+        $.post(submitMessageUrl, {
+            data: messageContent,
+            success: function(data) {
+                $('.chat-area').text("");
+                refreshMessages();
+            },
+            error: function() {
+                console.log("error");
+            }
+        });
+
+    }
+
+
+    function refreshMessages(){
+        var contact = $('.current-contact').text();
+
+        var getMessagesUrl = "/chat/getMessages/" + contact;
+
+        $.ajax(getMessagesUrl, {
+            success: function(data) {
+
+                    var chatWindow = $('.chat-window');
+                    $(".chat-window").html("");;
+                    for(var message in data){
+                        var div = document.createElement("div");
+                        if(message.isIncoming){
+                            div.className += "card col s8 msg-contact";
+                        }else{
+                            div.className += "card col s8 offset-s4 msg-own";
+                        }
+                        var p = document.createElement("p");
+                        var titleSpan = document.createElement("span");
+                        titleSpan.className += "msg-about";
+                        if(message.isIncoming){
+                            titleSpan.innerText = message.contact.login + " - " + message.date;
+                        }else{
+                            titleSpan.innerText = "Me - " + message.date;
+                        }
+                        var contentSpan = document.createElement("span");
+                        contentSpan.className = "msg-content";
+                        contentSpan.innerText = message.content;
+
+                        p.appendChild(titleSpan);
+                        p.appendChild(contentSpan);
+                        div.appendChild(p);
+                        chatWindow.appendChild(div);
+                    }
+
+
+            },
+            error: function() {
+                console.log("error");
+            }
+        });
+
+    }
+
+
 </script>
 
-<div class="card col s8 msg-contact" >
-    <p>
-        <span class="msg-about">Adam Smith - 2015-03-01 12:34:36</span>
-                      <span class="msg-content">Lorem ipsum dolor sit amet,
-                        consectetur
-                        adipiscing elit. Donec maximus sagittis rhoncus. Lorem ipsum dolor sit amet,
-                        consectetur
-                        adipiscing elit. Donec maximus sagittis rhoncus.
-                      </span>
-    </p>
-</div>
-
-<div class="card col s8 offset-s4 msg-own" >
-    <p>
-        <span class="msg-about">You - 2015-03-01 12:34:36</span>
-                      <span class="msg-content">Lorem ipsum dolor sit amet,
-                        consectetur
-                        adipiscing elit. Donec maximus sagittis rhoncus.
-                      </span>
-    </p>
-</div>
 
 </body>
 </html>
