@@ -174,3 +174,7 @@ textarea.chat-area {
 .chat-area:hover {
     overflow: auto;
 }
+
+.login {
+    padding: 10px 0px 10px 0px;
+}
