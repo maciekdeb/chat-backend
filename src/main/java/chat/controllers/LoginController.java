@@ -35,14 +35,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String submitLogin() {
-
+    public String submitLogin(HttpServletResponse response, @RequestParam String login) {
+        response.addCookie(new Cookie("LOGIN", login));
         return "redirect:/chat";
     }
 
-    @RequestMapping(value = "/addPerson", method = RequestMethod.POST)
-    public String addPerson(HttpServletResponse response, @RequestParam String login){
-        response.addCookie(new Cookie("LOGIN", login));
-        return "redirect:/";
-    }
 }
