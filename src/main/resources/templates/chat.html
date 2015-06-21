@@ -157,6 +157,12 @@
 
     (function(){
 
+        var checkMessagesAndContacts = function () {
+            buildContacts();
+            refreshMessages();
+        };
+        setInterval(checkMessagesAndContacts, 5000);
+
         $(".contact-list-add-submit").click(function(){
             if($(".contact-list-add-input").val()){
                 var saveContactUrl = "/chat/saveContact/" + $(".contact-list-add-input").val();
@@ -244,6 +250,8 @@
         });
 
     }
+
+
 
 
     function refreshMessages(){
