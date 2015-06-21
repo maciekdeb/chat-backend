@@ -45,10 +45,10 @@ public class RestEndpoint {
     public ResponseEntity saveContact(@PathVariable("login") String login) {
         if (contactRepository != null) {
             if (contactRepository.findByLogin(login) != null) {
-                return new ResponseEntity<String>(HttpStatus.CREATED);
+                return new ResponseEntity<String>(HttpStatus.CONFLICT);
             } else {
                 contactRepository.save(new Contact(login));
-                return new ResponseEntity<String>(HttpStatus.CONFLICT);
+                return new ResponseEntity<String>(HttpStatus.CREATED);
             }
         }
         return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE);

@@ -34,6 +34,7 @@ public class FilterLoginBean implements Filter {
             }
             ((HttpServletResponse) res).sendRedirect("/chat/login");
         }
+
     }
 
     @Override
