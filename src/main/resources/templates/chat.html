@@ -198,6 +198,9 @@
 
                 a.href = "#!";
                 a.className += "collection-item contact-list-name valign-wrapper waves-effect waves-light contact-item";
+                if(contact === $('#active-person').text()){
+                    a.className += " active";
+                }
                 var i = document.createElement("i");
                 i.className += "mdi-image-lens contact-online left";
                 a.appendChild(i);
@@ -224,12 +227,13 @@
 
 
     function changeActiveContact(element){
+        $('#contact-list-div').find('a').removeClass('active');
+
         var activePerson = $('#active-person');
         var value = $(element).children().clone().children().remove().end().text();
-
         activePerson.text(value);
-
         $(element).addClass('active');
+
         refreshMessages();
     };
 
