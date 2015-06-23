@@ -207,7 +207,7 @@
                 if (unreadMessages > 0) {
                     var msgSpan = document.createElement("span");
                     msgSpan.className += "new badge";
-                    msgSpan.text = unreadMessages;
+                    msgSpan.innerText = unreadMessages;
                     loginSpan.appendChild(msgSpan);
                 }
                 a.onclick = function(){ changeActiveContact(this);};
@@ -225,9 +225,11 @@
 
     function changeActiveContact(element){
         var activePerson = $('#active-person');
-        activePerson.text($(element).find('span').text());
-        $(element).addClass('active');
+        var value = $(element).children().clone().children().remove().end().text();
 
+        activePerson.text(value);
+
+        $(element).addClass('active');
         refreshMessages();
     };
 

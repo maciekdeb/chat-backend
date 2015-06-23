@@ -72,10 +72,14 @@ public class RestEndpoint {
 
     @RequestMapping(value = "/getMessages/{from}")
     public List<ChatMessage> getMessages(@PathVariable("from") String from){
-        List<ChatMessage> messages = new ArrayList<ChatMessage>();
+        List<ChatMessage> messages = new ArrayList<>();
         Contact contact = getContactRepository().findByLogin(from);
         if(contact != null){
             messages = getChatMessageRepository().findByContact(contact);
+            for(ChatMessage c : messages) {
+                c.setIsRead(true);
+                chatMessageRepository.save(c);
+            }
             System.out.println("Znaleziono kontakt");
         }
         System.out.println("getMessages " + messages);

@@ -1,7 +1,11 @@
 package chat.filters;
 
+import chat.jms.ScheduledReceiver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +17,9 @@ import java.io.IOException;
  */
 @Component
 public class FilterLoginBean implements Filter {
+
+    @Resource
+    private ScheduledReceiver scheduledReceiver;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -27,6 +34,9 @@ public class FilterLoginBean implements Filter {
             if (cookies != null){
                 for (Cookie ck : cookies) {
                     if (ck != null && "LOGIN".equals(ck.getName())) {
+                        if (scheduledReceiver != null) {
+                            scheduledReceiver.setLogin(ck.getValue());
+                        }
                         chain.doFilter(req, res);
                         return;
                     }
