@@ -251,8 +251,20 @@
 
     }
 
+    function formatDate(date){
+        var formattedDate = paddy(date.getDate(), 2) + "."
+        formattedDate += (paddy(date.getMonth()+1, 2) + ".")
+        formattedDate += (paddy(date.getFullYear(), 4) + " ")
+        formattedDate += (paddy(date.getHours(), 2) + ":")
+        formattedDate += (paddy(date.getMinutes(), 2) + ":")
+        formattedDate += paddy(date.getSeconds(), 2);
+        return formattedDate;
+    }
 
-
+    function paddy(number, p) {
+        var pad = new Array(1 + p).join('0');
+        return (pad + number).slice(-pad.length);
+    }
 
     function refreshMessages(){
         var contact = $('.current-contact').text();
@@ -274,10 +286,11 @@
                         var p = document.createElement("p");
                         var titleSpan = document.createElement("span");
                         titleSpan.className += "msg-about";
+                        var date = new Date(data[message].date);
                         if(data[message].isIncoming){
-                            titleSpan.innerText = data[message].contact.login + " - " + data[message].date;
+                            titleSpan.innerText = data[message].contact.login + " - " + formatDate(date);
                         }else{
-                            titleSpan.innerText = "Me - " + data[message].date;
+                            titleSpan.innerText = "Me - " + formatDate(date);
                         }
                         var contentSpan = document.createElement("span");
                         contentSpan.className = "msg-content";
