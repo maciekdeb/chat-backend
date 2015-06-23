@@ -19,7 +19,6 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
 }
 
 dependencies {
@@ -30,7 +29,8 @@ dependencies {
     compile("org.apache.activemq:activemq-broker")
     compile("org.thymeleaf:thymeleaf-spring4:2.1.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("com.h2database:h2")
+    runtime("mysql:mysql-connector-java:5.1.25")
+//    compile("com.h2database:h2")
     testCompile("junit:junit")
 }
 
